@@ -1,7 +1,7 @@
 # Raspberry Pi Fullscreen Web Kiosk
 
 
-Download Rasbian LITE (https://www.raspberrypi.org/downloads/raspbian/) and flash it on microSD card
+Download Rasbian (https://www.raspberrypi.org/downloads/raspbian/) and flash it on microSD card
 
 Setup raspberry pi to auto login on boot
 
