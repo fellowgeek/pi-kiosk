@@ -1,5 +1,14 @@
 # Raspberry Pi Fullscreen Web Kiosk
 
+Setup raspberry pi to auto login on boot
+
+```
+sudo raspi-config
+```
+Goto Boot Options > B1 Desktop / CLI > B2 Console AutoLogin
+Then hit enter select 'OK' and exit
+
+
 Install 'chromium' and 'unclutter'
 ```
 sudo apt-get install chromium-browser
