@@ -1,7 +1,7 @@
 # Raspberry Pi Fullscreen Web Kiosk
 
 
-Download Rasbian (https://www.raspberrypi.org/downloads/raspbian/) and flash it on microSD card
+Download Rasbian LITE (https://www.raspberrypi.org/downloads/raspbian/) and flash it on microSD card
 
 Setup raspberry pi to auto login on boot
 
@@ -12,8 +12,9 @@ Goto Boot Options > B1 Desktop / CLI > B2 Console AutoLogin
 Then hit enter select 'OK' and exit
 
 
-Install 'chromium' and 'unclutter'
+Install 'X11', 'chromium' and 'unclutter'
 ```
+sudo apt-get install --no-install-recommends xserver-xorg x11-xserver-utils xinit
 sudo apt-get install chromium-browser
 sudo apt-get install unclutter
 ```
