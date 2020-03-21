@@ -19,6 +19,11 @@ sudo apt-get install chromium-browser
 sudo apt-get install unclutter
 ```
 
+Disable Chromium updates
+```
+sudo touch /etc/chromium-browser/customizations/01-disable-update-check;echo CHROMIUM_FLAGS=\"\$\{CHROMIUM_FLAGS\} --check-for-update-interval=31536000\" | sudo tee /etc/chromium-browser/customizations/01-disable-update-check
+```
+
 Setup '.bash_profile' script
 
 ```
