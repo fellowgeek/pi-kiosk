@@ -76,8 +76,8 @@ function rpiPingServer() {
     )
     .then($response => $response.json())
     .then($json => {
-        $PIN = $json.data.Pin;
-        fs.writeFileSync('pin.txt', $json.data.Pin, 'utf8');
+        $PIN = String($json.data.Pin);
+        fs.writeFileSync('pin.txt', $PIN, 'utf8');
         if ($PIN != $lastPIN) {
             rpiMQTTSubscribe();
         }
@@ -87,7 +87,7 @@ function rpiPingServer() {
 
 function rpiMQTTSubscribe() {
 
-    if ($client.connected == true && $PIN != '....') {
+    if ($client.connected == true && $PIN != '....' && $PIN != '') {
         console.log('MQTT: subscribing, pin is:', $PIN);
         $client.subscribe('mqtt/rpi/broadcast');
         $client.subscribe('mqtt/rpi/' + $PIN);
@@ -137,6 +137,22 @@ $client.on('message', function ($topic, $message) {
             if ($video != '') {
                 spawn("omxplayer", [$video]);
             }
+        break;
+
+        case /^>AUDIO (.*?)$/.test($message):
+            var $matches = /^>AUDIO (.*?)$/.exec($message);
+            var $audio = $matches[1] || '';
+            if ($audio != '') {
+                spawn("omxplayer", [$audio]);
+            }
+        break;
+
+        case /^>TV ON$/.test($message):
+            spawn("/home/pi/tvon.sh");
+        break;
+
+        case /^>TV OFF$/.test($message):
+            spawn("/home/pi/tvoff.sh");
         break;
 
         case /^>URL (.*?)$/.test($message):

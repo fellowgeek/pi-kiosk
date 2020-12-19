@@ -4,7 +4,9 @@ GLOBALS
 ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
 */
 
-var $client = mqtt.connect('wss://MQTT_HOST_ADDRESS', {
+var $online = false;
+
+var $client = mqtt.connect('wss://MQTT_ADDRESS', {
     clientId: 'mqttjs_' + Math.random().toString(16).substr(2, 8),
     username: 'USERNAME',
     password: 'PASSWORD'
@@ -44,27 +46,19 @@ function updateDisplayPin() {
         }
     });
 
-    readTextFile("online.txt", function ($online) {
-        if ($online == 'true') {
-            document.querySelector('#pin').classList = 'bg-online';
-        } else {
-            document.querySelector('#pin').classList = 'bg-offline';
-        }
-    });
-
 }
 
 function MQTTSubscribe() {
 
     readTextFile("pin.txt", function ($pin) {
-        if ($pin != '' && $pin != '....') {
+        if ($pin != '' && $pin != '....' && $online == true) {
             document.querySelector('#pin').innerHTML = $pin;
             $client.subscribe('mqtt/rpi/broadcast');
             $client.subscribe('mqtt/rpi/' + $pin);
             $client.subscribe('mqtt/rpi/' + $pin + '/whiteboard');
         } else {
             setTimeout(() => {
-                MQTTSubscibe();
+                MQTTSubscribe();
             }, 10000);
         }
     });
@@ -140,7 +134,14 @@ document.addEventListener('DOMContentLoaded', function () {
     }, 5000);
 
     $client.on('connect', function () {
+        $online = true;
+        document.querySelector('#pin').classList = 'bg-online';
         MQTTSubscribe();
+    });
+
+    $client.on('offline', function () {
+        $online = false;
+        document.querySelector('#pin').classList = 'bg-offline';
     });
 
     $client.on("message", function ($from, $message) {
@@ -161,6 +162,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 break;
 
             case /^>VIDEO (.*?)$/.test($message):
+                break;
+
+            case /^>AUDIO (.*?)$/.test($message):
+                break;
+
+            case /^>TV ON (.*?)$/.test($message):
+                break;
+
+            case /^>TV OFF (.*?)$/.test($message):
                 break;
 
             case /^>URL (.*?)$/.test($message):
