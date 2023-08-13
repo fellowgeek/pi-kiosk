@@ -36,6 +36,10 @@ Then paste the content below inside '.bash_profile' file and save
 ```
 if  [ $(tty) == "/dev/tty1" ]
 then
+    while [ "$(hostname -I)" = "" ]; do
+        echo -e "\e[1A\e[KNo network: $(date)"
+        sleep 1
+    done
     startx
 fi
 ```
